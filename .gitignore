@@ -1,10 +1,7 @@
 # Environment & Secrets
 .env
 *.env
-<<<<<<< HEAD
 backend/firebase_key.json
-=======
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
 
 # Python
 __pycache__/

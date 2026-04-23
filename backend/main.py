@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os
 import threading
 import time
@@ -31,8 +30,7 @@ logger = logging.getLogger(__name__)
 # ─────────────────────────────────────────────
 load_dotenv()   # This loads your .env file
 
-print("GOOGLE_CLIENT_ID:", os.getenv("GOOGLE_CLIENT_ID"))
-print("GOOGLE_CLIENT_SECRET:", os.getenv("GOOGLE_CLIENT_SECRET"))
+
 
 
 # ─────────────────────────────────────────────
@@ -41,11 +39,7 @@ print("GOOGLE_CLIENT_SECRET:", os.getenv("GOOGLE_CLIENT_SECRET"))
 def init_firebase():
     if not firebase_admin._apps:
         base_dir = os.path.dirname(__file__)
-        candidates = [
-            os.path.join(base_dir, "firebase_key.json"),
-            os.path.join(base_dir, "firebase_key.json.json"),
-        ]
-        key_file = next((f for f in candidates if os.path.exists(f)), None)
+        key_file = os.path.join(base_dir, "firebase_key.json")
 
         if key_file:
             cred = credentials.Certificate(key_file)
@@ -84,23 +78,11 @@ app.add_middleware(
 # ─────────────────────────────────────────────
 # Routers
 # ─────────────────────────────────────────────
-=======
-from fastapi import FastAPI
-from backend.database import engine, Base
-from backend.routers import auth, planner, tracker, explainer
-
-# Create database tables
-Base.metadata.create_all(bind=engine)
-
-app = FastAPI(title="AI Study Planner API")
-
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
 app.include_router(auth.router)
 app.include_router(planner.router)
 app.include_router(tracker.router)
 app.include_router(explainer.router)
 
-<<<<<<< HEAD
 
 @app.get("/")
 def read_root():
@@ -487,8 +469,3 @@ scheduler_thread.start()
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("backend.main:app", host="127.0.0.1", port=8042, reload=True)
-=======
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the AI Study Planner API!"}
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124

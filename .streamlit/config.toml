@@ -1,10 +1,17 @@
 [theme]
-primaryColor = "#4ADE80"
-backgroundColor = "#111827"
-secondaryBackgroundColor = "#1F2937"
-textColor = "#F9FAFB"
-font = "sans serif"
+primaryColor        = "#6366f1"
+backgroundColor     = "#020617"
+secondaryBackgroundColor = "#0f172a"
+textColor           = "#f1f5f9"
+font                = "sans serif"
 
 [server]
-enableCORS = false
+enableCORS          = false
 enableXsrfProtection = false
+
+[client]
+showSidebarNavigation = false
+
+[runner]
+# Single-page app entry point
+fastReruns = true

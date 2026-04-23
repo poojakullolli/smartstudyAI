@@ -19,7 +19,6 @@ def doubt_explain(request: schemas.DoubtRequest, current_user: models.User = Dep
         user_id=current_user.id
     )
     db.add(new_doubt)
-<<<<<<< HEAD
     
     # Award XP for AI session completion
     from datetime import datetime, date, timedelta
@@ -47,10 +46,6 @@ def doubt_explain(request: schemas.DoubtRequest, current_user: models.User = Dep
     db.commit()
     db.refresh(new_doubt)
     db.refresh(current_user)
-=======
-    db.commit()
-    db.refresh(new_doubt)
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
     
     return {"question": request.question, "answer": answer}
 

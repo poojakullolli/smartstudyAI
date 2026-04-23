@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os
 import time
 import base64
@@ -11,20 +10,10 @@ import re
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from api_client import signup_user, login_user
 
-try:
-    from translations import t
-except ImportError:
-    def t(key, **kwargs):
-        return key
+from translations import t
 
 # ── Assets ────────────────────────────────────────────────────────────────────
 _ASSETS_DIR = os.path.join(os.path.dirname(__file__), "assets")
-os.makedirs(_ASSETS_DIR, exist_ok=True)
-
-_SRC_ILLUS = r"C:\Users\Admin\.gemini\antigravity\brain\d7905272-1c8b-41e8-b94b-1a35dd8bf82a\premium_study_ai_1776324696537.png"
-_DST_ILLUS = os.path.join(_ASSETS_DIR, "premium_study_illustration.png")
-if not os.path.exists(_DST_ILLUS) and os.path.exists(_SRC_ILLUS):
-    shutil.copy2(_SRC_ILLUS, _DST_ILLUS)
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -39,6 +28,8 @@ if "token" not in st.session_state:
     st.session_state.token = None
 if "auth_mode" not in st.session_state:
     st.session_state.auth_mode = "login"
+if "language" not in st.session_state:
+    st.session_state.language = "en"
 # Force dark theme always – remove light mode entirely
 st.session_state.theme = "dark"
 
@@ -77,15 +68,23 @@ if "token" in st.query_params:
         st.session_state["authenticated"] = True
     st.rerun()
 
+# ── Language from URL ───────────────────────────────────────────────────────
+if "lang" in st.query_params:
+    lang = st.query_params["lang"]
+    if lang in ["en", "hi", "kn", "ta", "te"]:
+        st.session_state.language = lang
+    st.query_params.clear()
+    st.rerun()
+
 # ── Already logged in ──────────────────────────────────────────────────────────
 if st.session_state.token is not None:
-    try:
-        st.switch_page("pages/1_Dashboard.py")
-    except Exception:
-        st.rerun()
+    import dashboard
+    dashboard.main()
+    st.stop()
+
 
 # ── Image HTML ─────────────────────────────────────────────────────────────────
-ILLUS_PATH = _DST_ILLUS
+ILLUS_PATH = os.path.join(_ASSETS_DIR, "study_illustration.png")
 illus_b64  = img_to_b64(ILLUS_PATH)
 illus_html = (
     f'<img src="data:image/png;base64,{illus_b64}" class="illus-img" alt="SmartStudy AI Mascot" />'
@@ -124,7 +123,7 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* ── 1. True black background – every possible Streamlit container ── */
+/* ── 1. Radial gradient background – every possible Streamlit container ── */
 html,
 body,
 #root,
@@ -136,9 +135,8 @@ body,
 main,
 .main,
 .block-container {
-    background-color: #000000 !important;
-    background-image: none !important;
-    background: #000000 !important;
+    background: radial-gradient(ellipse at top, #0f172a 0%, #020617 50%, #000000 100%) !important;
+    background-attachment: fixed !important;
 }
 
 /* Prevent white flash on rerun */
@@ -238,8 +236,8 @@ footer,
 /* Radial dark-blue glow behind mascot */
 .illus-glow {
     position: absolute;
-    width: 340px;
-    height: 340px;
+    width: 240px;
+    height: 240px;
     background: radial-gradient(circle, rgba(30,64,175,0.35) 0%, rgba(30,64,175,0.08) 60%, transparent 80%);
     filter: blur(60px);
     top: 50%;
@@ -251,8 +249,8 @@ footer,
 }
 
 .illus-img {
-    width: 88%;
-    max-width: 430px;
+    width: 70%;
+    max-width: 300px;
     border-radius: 20px;
     position: relative;
     z-index: 10;
@@ -261,8 +259,8 @@ footer,
     box-shadow: 0 30px 70px rgba(0,0,0,0.6);
 }
 .illus-fallback {
-    width: 380px;
-    height: 380px;
+    width: 240px;
+    height: 240px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(30,64,175,0.15) 0%, transparent 70%);
 }
@@ -536,7 +534,84 @@ input:-webkit-autofill:active {
 
 /* ── 21. Spinner text color ── */
 [data-testid="stSpinner"] p { color: rgba(255,255,255,0.7) !important; font-family: 'Poppins', sans-serif !important; }
+
+/* ── 22. Subtle animated floating blurred circles ── */
+.floating-circles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+.float-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.08;
+    animation: floatCircle 25s ease-in-out infinite;
+}
+.float-circle:nth-child(1) {
+    width: 400px;
+    height: 400px;
+    background: #1e3a8a;
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+.float-circle:nth-child(2) {
+    width: 300px;
+    height: 300px;
+    background: #0f172a;
+    top: 60%;
+    right: 10%;
+    animation-delay: 5s;
+}
+.float-circle:nth-child(3) {
+    width: 350px;
+    height: 350px;
+    background: #1e3a8a;
+    bottom: 5%;
+    left: 30%;
+    animation-delay: 10s;
+}
+.float-circle:nth-child(4) {
+    width: 250px;
+    height: 250px;
+    background: #0f172a;
+    top: 30%;
+    right: 30%;
+    animation-delay: 15s;
+}
+@keyframes floatCircle {
+    0%, 100% { 
+        transform: translate(0, 0) scale(1);
+        opacity: 0.06;
+    }
+    25% { 
+        transform: translate(20px, -30px) scale(1.1);
+        opacity: 0.10;
+    }
+    50% { 
+        transform: translate(-15px, 20px) scale(0.95);
+        opacity: 0.08;
+    }
+    75% { 
+        transform: translate(30px, 10px) scale(1.05);
+        opacity: 0.07;
+    }
+}
 </style>
+
+<!-- Inject floating circles -->
+<div class="floating-circles">
+    <div class="float-circle"></div>
+    <div class="float-circle"></div>
+    <div class="float-circle"></div>
+    <div class="float-circle"></div>
+</div>
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -672,46 +747,3 @@ with right_col:
     """, unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
-=======
-import streamlit as st
-from frontend.api_client import signup_user, login_user
-
-st.set_page_config(page_title="AI Study Planner", page_icon="🎓", layout="centered")
-
-if "token" not in st.session_state:
-    st.session_state.token = None
-
-st.title("Welcome to AI Study Planner + Smart Doubt Explainer")
-
-if st.session_state.token is not None:
-    st.success("You are logged in! Go to the Dashboard page.")
-    st.stop()
-
-tab1, tab2 = st.tabs(["Login", "Sign Up"])
-
-with tab1:
-    st.subheader("Login")
-    login_email = st.text_input("Email", key="login_email")
-    login_password = st.text_input("Password", type="password", key="login_password")
-    if st.button("Login"):
-        with st.spinner("Logging in..."):
-            res = login_user(login_email, login_password)
-            if res.status_code == 200:
-                st.session_state.token = res.json().get("access_token")
-                st.success("Login successful! Please click a page on the sidebar.")
-                st.rerun()
-            else:
-                st.error("Invalid email or password.")
-
-with tab2:
-    st.subheader("Create a new account")
-    signup_email = st.text_input("Email", key="signup_email")
-    signup_password = st.text_input("Password", type="password", key="signup_password")
-    if st.button("Sign Up"):
-        with st.spinner("Creating account..."):
-            res = signup_user(signup_email, signup_password)
-            if res.status_code in [200, 201]:
-                st.success("Account created successfully! You can now log in.")
-            else:
-                st.error(f"Error: {res.json().get('detail', 'Failed to sign up.')}")
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124

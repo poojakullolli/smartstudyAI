@@ -24,7 +24,6 @@ def complete_task(task_id: int, current_user: models.User = Depends(get_current_
     task = db.query(models.Task).filter(models.Task.id == task_id, models.Task.user_id == current_user.id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-<<<<<<< HEAD
     
     was_completed = task.is_completed
     task.is_completed = not task.is_completed
@@ -65,11 +64,6 @@ def complete_task(task_id: int, current_user: models.User = Depends(get_current_
     db.commit()
     db.refresh(task)
     db.refresh(current_user)
-=======
-    task.is_completed = not task.is_completed
-    db.commit()
-    db.refresh(task)
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
     return task
 
 @router.delete("/tasks/{task_id}")

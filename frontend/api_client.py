@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """
 frontend/api_client.py
 
@@ -164,75 +163,10 @@ def get_tasks(token: str) -> list:
         f"{BASE_URL}/tracker/tasks",
         headers={"Authorization": f"Bearer {token}"},
     )
-=======
-import os
-import requests
-from dotenv import load_dotenv
-
-load_dotenv()
-BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8042").replace("localhost", "127.0.0.1")
-
-def signup_user(email, password):
-    url = f"{BACKEND_URL}/auth/signup"
-    payload = {"email": email, "password": password}
-    response = requests.post(url, json=payload)
-    return response
-
-def login_user(email, password):
-    url = f"{BACKEND_URL}/auth/login"
-    payload = {"username": email, "password": password}
-    response = requests.post(url, data=payload)
-    return response
-
-def get_me(token):
-    url = f"{BACKEND_URL}/auth/me"
-    headers = {"Authorization": f"Bearer {token}"}
-    response = requests.get(url, headers=headers)
-    return response
-
-def create_study_plan(token, subject, exam_date, daily_hours, is_weak):
-    url = f"{BACKEND_URL}/planner/create"
-    headers = {"Authorization": f"Bearer {token}"}
-    payload = {
-        "subject": subject,
-        "exam_date": exam_date.isoformat(),
-        "daily_available_hours": daily_hours,
-        "is_weak_subject": is_weak
-    }
-    return requests.post(url, json=payload, headers=headers)
-
-def get_my_plans(token):
-    url = f"{BACKEND_URL}/planner/my-plans"
-    headers = {"Authorization": f"Bearer {token}"}
-    return requests.get(url, headers=headers)
-
-def delete_study_plan(token, plan_id):
-    url = f"{BACKEND_URL}/planner/delete/{plan_id}"
-    headers = {"Authorization": f"Bearer {token}"}
-    return requests.delete(url, headers=headers)
-
-def toggle_complete(token, plan_id):
-    url = f"{BACKEND_URL}/planner/toggle-complete/{plan_id}"
-    headers = {"Authorization": f"Bearer {token}"}
-    return requests.put(url, headers=headers)
-
-def create_task(token, subject, topic, duration):
-    url = f"{BACKEND_URL}/tracker/tasks"
-    headers = {"Authorization": f"Bearer {token}"}
-    payload = {"subject": subject, "topic": topic, "duration_minutes": duration}
-    res = requests.post(url, json=payload, headers=headers)
-    return res.status_code == 200
-
-def get_tasks(token):
-    url = f"{BACKEND_URL}/tracker/tasks"
-    headers = {"Authorization": f"Bearer {token}"}
-    res = requests.get(url, headers=headers)
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
     if res.status_code == 200:
         return res.json()
     return []
 
-<<<<<<< HEAD
 
 def toggle_task(token: str, task_id: int):
     _safe_request(
@@ -259,27 +193,10 @@ def get_history(token: str) -> list:
         f"{BASE_URL}/explainer/history",
         headers={"Authorization": f"Bearer {token}"},
     )
-=======
-def toggle_task(token, task_id):
-    url = f"{BACKEND_URL}/tracker/tasks/{task_id}"
-    headers = {"Authorization": f"Bearer {token}"}
-    requests.put(url, headers=headers)
-
-def delete_task(token, task_id):
-    url = f"{BACKEND_URL}/tracker/tasks/{task_id}"
-    headers = {"Authorization": f"Bearer {token}"}
-    requests.delete(url, headers=headers)
-
-def get_history(token):
-    url = f"{BACKEND_URL}/explainer/history"
-    headers = {"Authorization": f"Bearer {token}"}
-    res = requests.get(url, headers=headers)
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
     if res.status_code == 200:
         return res.json()
     return []
 
-<<<<<<< HEAD
 
 def explain_doubt(token: str, question: str, difficulty: str):
     res = _safe_request(
@@ -356,13 +273,3 @@ def get_challenges(token: str):
         f"{BASE_URL}/challenge/status",
         headers={"Authorization": f"Bearer {token}"},
     )
-=======
-def explain_doubt(token, question, difficulty):
-    url = f"{BACKEND_URL}/explainer/explain"
-    headers = {"Authorization": f"Bearer {token}"}
-    payload = {"question": question, "difficulty": difficulty}
-    res = requests.post(url, json=payload, headers=headers)
-    if res.status_code == 200:
-        return res.json()
-    return None
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124

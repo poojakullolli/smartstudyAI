@@ -19,8 +19,8 @@ def get_google_flow():
     # Load OAuth Credentials from environment variables
     # We use a dynamically created client config dictionary 
     # instead of a static JSON file for better security.
-    client_id = os.getenv("GOOGLE_CLIENT_ID", "")
-    client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "")
+    client_id = os.getenv("GOOGLE_CLIENT_ID")
+    client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
     redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", "http://127.0.0.1:8042/auth/google/callback")
     
     # Validation to prevent runtime crashes if variables aren't set

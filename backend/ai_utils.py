@@ -81,7 +81,6 @@ def explain_doubt(question: str, difficulty: str):
         temperature=0.7
     )
     return response.choices[0].message.content
-<<<<<<< HEAD
 
 
 def analyze_weak_subjects(study_data: dict):
@@ -131,5 +130,3 @@ def analyze_weak_subjects(study_data: dict):
         temperature=0.7
     )
     return response.choices[0].message.content
-=======
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124

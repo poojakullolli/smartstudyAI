@@ -8,7 +8,6 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
-<<<<<<< HEAD
     full_name = Column(String, nullable=True)
     hashed_password = Column(String, nullable=False)
     xp_points = Column(Integer, default=0)
@@ -17,9 +16,6 @@ class User(Base):
     level = Column(Integer, default=1)
     streak = Column(Integer, default=0)
     last_study_date = Column(Date, nullable=True)
-=======
-    hashed_password = Column(String, nullable=False)
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
 
     plans = relationship("StudyPlan", back_populates="owner")
     tasks = relationship("Task", back_populates="owner")
@@ -63,7 +59,6 @@ class DoubtHistory(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     owner = relationship("User", back_populates="doubts")
-<<<<<<< HEAD
 
 class StudySession(Base):
     __tablename__ = "study_sessions"
@@ -93,5 +88,3 @@ class Challenge(Base):
 
     challenger = relationship("User", foreign_keys=[challenger_id])
     opponent = relationship("User", foreign_keys=[opponent_id])
-=======
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124

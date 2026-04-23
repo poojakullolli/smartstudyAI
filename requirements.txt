@@ -1,14 +1,10 @@
-<<<<<<< HEAD
 # ── Backend ───────────────────────────────────────────────────────────────────
-=======
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124
 fastapi>=0.100.0
 uvicorn>=0.22.0
 sqlalchemy>=2.0.0
 bcrypt>=4.0.0
 python-jose[cryptography]>=3.3.0
 python-multipart>=0.0.6
-<<<<<<< HEAD
 schedule>=1.2.0
 
 # ── Firebase Auth ─────────────────────────────────────────────────────────────
@@ -24,10 +20,3 @@ python-dotenv>=1.0.0
 pydantic[email]>=2.0.0
 email-validator>=2.0.0
 openai>=1.0.0
-=======
-streamlit>=1.25.0
-requests>=2.31.0
-python-dotenv>=1.0.0
-pydantic[email]>=2.0.0
-openai>=1.0.0
->>>>>>> c41cad1c30704f98dab208e9206dad75a002b124

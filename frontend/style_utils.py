@@ -29,34 +29,20 @@ def inject_custom_css():
 
     /* ── Premium SaaS Design System ── */
     :root {
-        /* Core Colors */
-        --primary-50: #eef2ff;
-        --primary-100: #e0e7ff;
-        --primary-200: #c7d2fe;
-        --primary-300: #a5b4fc;
-        --primary-400: #818cf8;
-        --primary-500: #6366f1;
-        --primary-600: #4f46e5;
-        --primary-700: #4338ca;
-        --primary-800: #3730a3;
-        --primary-900: #312e81;
+        /* Core Colors - Refined Indigo & Violet */
+        --primary: #6366f1;
+        --primary-glow: rgba(99, 102, 241, 0.5);
+        --accent: #a78bfa;
+        
+        /* Premium Gradients */
+        --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        --surface-gradient: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+        --bg-gradient: linear-gradient(135deg, #0a0f1c, #0f1b2d, #111827);
 
-        /* Semantic Colors */
-        --success: #10b981;
-        --warning: #f59e0b;
-        --error: #ef4444;
-        --info: #3b82f6;
-
-        /* Gradients */
-        --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-        --glow-gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #6366f1);
-        --bg-gradient: radial-gradient(ellipse at top, #0f172a 0%, #020617 50%, #000000 100%);
-        --glass-gradient: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
-
-        /* Glass Effect */
-        --glass-bg: rgba(13, 18, 48, 0.72);
-        --glass-border: rgba(255, 255, 255, 0.09);
-        --glass-border-hover: rgba(99, 102, 241, 0.4);
+        /* Glassmorphism 2.0 */
+        --glass-bg: rgba(15, 23, 42, 0.6);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --glass-highlight: rgba(255, 255, 255, 0.03);
 
         /* Shadows */
         --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
@@ -126,20 +112,34 @@ def inject_custom_css():
         box-sizing: border-box;
     }
 
-    /* ── Soft glowing gradient background ── */
-    html, body,
-    [class*="css"],
-    .stApp,
-    [data-testid="stApp"],
-    [data-testid="stAppViewContainer"],
-    [data-testid="stAppViewContainer"] > section,
-    [data-testid="stAppViewContainer"] > section > div,
-    .main, main {
+    /* ── Force Dark Theme Globally (Full Page Look) ── */
+    html, body, .stApp, [data-testid="stApp"], [data-testid="stAppViewContainer"], .main {
         background: var(--bg-gradient) !important;
         background-attachment: fixed !important;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
+        color: #ffffff !important;
+        min-height: 100vh !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+    }
+
+    .block-container, section {
+        background: transparent !important;
+        max-width: 100% !important;
+    }
+
+    section[data-testid="stSidebar"] {
+        background: #0f172a !important;
+    }
+
+    .block-container {
+        padding-top: 5rem !important;
+    }
+
+    /* Neutralise any Streamlit-injected white backgrounds */
+    header, [data-testid="stHeader"], [data-testid="stToolbar"] {
+        background: transparent !important;
     }
 
     /* Subtle animated floating blurred circles */
@@ -256,10 +256,12 @@ def inject_custom_css():
     [data-testid="collapsedControl"]    { display: none !important; }
 
     .block-container {
-        padding-top: 88px !important;
+        padding-top: 1rem !important;
         padding-left: 2.5rem !important;
         padding-right: 2.5rem !important;
-        max-width: 100% !important;
+        max-width: 1200px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 
     /* Remove default dividers/borders from Streamlit containers */
@@ -276,31 +278,29 @@ def inject_custom_css():
 
     /* ── Glassmorphism Card System ── */
     .glass-card {
-        background: var(--glass-bg);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-card);
-        box-shadow: var(--shadow-lg);
-        padding: var(--card-padding);
-        transition: transform var(--transition-medium), box-shadow var(--transition-medium), border-color var(--transition-medium);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        box-shadow: 
+            0 10px 15px -3px rgba(0, 0, 0, 0.1),
+            0 4px 6px -2px rgba(0, 0, 0, 0.05),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
-        margin-bottom: 2rem;
-    }
-    .glass-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 3px;
-        background: var(--primary-gradient);
-        opacity: 0;
-        transition: opacity var(--transition-fast);
+        margin-bottom: 30px;
     }
     .glass-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-xl), var(--shadow-glow);
-        border-color: var(--glass-border-hover);
+        transform: translateY(-8px);
+        box-shadow: 
+            0 25px 50px -12px rgba(0, 0, 0, 0.5),
+            0 0 15px 0 rgba(99, 102, 241, 0.1),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        border-color: rgba(99, 102, 241, 0.4);
     }
     .glass-card:hover::before { opacity: 1; }
 
@@ -384,28 +384,24 @@ def inject_custom_css():
         letter-spacing: 0.1px;
     }
 
-    /* Streamlit built-in buttons — premium gradient */
+    /* Streamlit built-in buttons — premium gradient + glow */
     div[data-testid="stButton"] > button {
         background: var(--primary-gradient) !important;
         color: #fff !important;
         border: none !important;
-        border-radius: var(--radius-xl) !important;
-        padding: var(--spacing-3) var(--spacing-6) !important;
+        border-radius: 14px !important;
+        padding: 0.8rem 1.5rem !important;
         font-weight: 600 !important;
-        font-size: var(--text-sm) !important;
-        transition:
-            transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
-            box-shadow 200ms ease !important;
-        box-shadow: var(--shadow-md) !important;
-        letter-spacing: 0.1px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39) !important;
     }
     div[data-testid="stButton"] > button:hover {
-        transform: scale(1.05) translateY(-2px) !important;
-        box-shadow: var(--shadow-lg), var(--shadow-glow) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5) !important;
+        background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%) !important;
     }
     div[data-testid="stButton"] > button:active {
-        transform: scale(1.01) translateY(0) !important;
-        box-shadow: var(--shadow-md) !important;
+        transform: translateY(0) !important;
     }
     div[data-testid="stButton"] > button[kind="secondary"] {
         background: rgba(255,255,255,0.05) !important;

@@ -51,10 +51,10 @@ def img_to_b64(path: str) -> str:
         pass
     return ""
 
-# ── OAuth token from URL ───────────────────────────────────────────────────────
+# ── Restore Token from URL (Persistent Login) ──────────────────────────────────
 if "token" in st.query_params:
     st.session_state.token = st.query_params["token"]
-    st.query_params.clear()
+    # We DON'T clear it now to keep it persistent on refresh
     try:
         from api_client import get_me
         user_res = get_me(st.session_state.token)
@@ -63,10 +63,8 @@ if "token" in st.query_params:
             st.session_state["authenticated"] = True
             st.session_state["user_name"]     = user_data.get("full_name", "User")
             st.session_state["user_email"]    = user_data.get("email", "")
-            st.session_state["profile_pic"]   = ""
     except Exception:
-        st.session_state["authenticated"] = True
-    st.rerun()
+        pass
 
 # ── Language from URL ───────────────────────────────────────────────────────
 if "lang" in st.query_params:
@@ -84,7 +82,7 @@ if st.session_state.token is not None:
 
 
 # ── Image HTML ─────────────────────────────────────────────────────────────────
-ILLUS_PATH = os.path.join(_ASSETS_DIR, "study_illustration.png")
+ILLUS_PATH = os.path.join(_ASSETS_DIR, "premium_study_illustration.png")
 illus_b64  = img_to_b64(ILLUS_PATH)
 illus_html = (
     f'<img src="data:image/png;base64,{illus_b64}" class="illus-img" alt="SmartStudy AI Mascot" />'
@@ -123,7 +121,7 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* ── 1. Radial gradient background – every possible Streamlit container ── */
+/* ── 1. Premium Background ── */
 html,
 body,
 #root,
@@ -135,8 +133,18 @@ body,
 main,
 .main,
 .block-container {
-    background: radial-gradient(ellipse at top, #0f172a 0%, #020617 50%, #000000 100%) !important;
+    background: linear-gradient(135deg, #0a0f1c, #0f1b2d, #111827) !important;
     background-attachment: fixed !important;
+    color: #ffffff !important;
+}
+
+/* Remove default Streamlit white containers */
+.main, .block-container, section {
+    background: transparent !important;
+}
+
+section[data-testid="stSidebar"] {
+    background: #0f172a !important;
 }
 
 /* Prevent white flash on rerun */
@@ -272,13 +280,16 @@ footer,
 
 /* ── 8. Glass card (form wrapper) ── */
 [data-testid="stForm"] {
-    background: rgba(255,255,255,0.05) !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
-    border-radius: 18px !important;
-    padding: 40px !important;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 24px !important;
+    padding: 3rem !important;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.05) !important;
     animation: fadeScaleUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     width: 100%;
     max-width: 430px;
@@ -683,7 +694,9 @@ with right_col:
                     with st.spinner("Authenticating…"):
                         res = login_user(login_email, login_password)
                         if res.status_code == 200:
-                            st.session_state.token = res.json().get("access_token")
+                            token = res.json().get("access_token")
+                            st.session_state.token = token
+                            st.query_params["token"] = token  # Persist for refresh
                             st.markdown(success_animation, unsafe_allow_html=True)
                             time.sleep(1.2)
                             st.rerun()

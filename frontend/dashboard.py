@@ -42,77 +42,142 @@ from translations import t
 # ══════════════════════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
-/* ── Kill Streamlit chrome ── */
-#MainMenu, footer, header,
-[data-testid="stToolbar"], [data-testid="stHeader"],
-[data-testid="stStatusWidget"], [data-testid="stBaseButton-header"],
-[data-testid="collapsedControl"], section[data-testid="stSidebar"],
-.stDeployButton { display:none!important; visibility:hidden!important; }
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 
-/* ── Dark radial background ── */
-html, body, #root, .stApp,
-[data-testid="stApp"],
-[data-testid="stAppViewContainer"],
-[data-testid="stAppViewContainer"] > section,
-[data-testid="stAppViewContainer"] > section > div,
-.main, main {
-    background: radial-gradient(ellipse at top, #0f172a 0%, #020617 55%, #000 100%) !important;
+/* ── Global Styles (Full Page Look) ── */
+html, body, [data-testid="stApp"], .stApp, .main, [data-testid="stAppViewContainer"] {
+    background: var(--bg-gradient) !important;
     background-attachment: fixed !important;
-    min-height: 100vh;
-    margin: 0; padding: 0;
+    color: #ffffff !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
 }
-html { background: #000 !important; }
 
-/* ── Block container — leave room for fixed navbar ── */
-[data-testid="stAppViewContainer"] > section > div.block-container {
-    padding-top: 88px !important;
-    padding-left: 2.4rem !important;
-    padding-right: 2.4rem !important;
+.block-container, section {
+    background: transparent !important;
     max-width: 100% !important;
 }
 
-/* ── Section fade-in transition ── */
-.section-enter {
-    animation: sectionFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+/* Remove extra white sections */
+section[data-testid="stSidebar"] {
+    background: #0f172a !important;
 }
-@keyframes sectionFadeIn {
-    from { opacity: 0; transform: translateY(18px); }
+
+/* ── Floating Particles ── */
+.particles-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    animation: float 20s infinite linear;
+}
+@keyframes float {
+    from { transform: translateY(100vh) rotate(0deg); }
+    to { transform: translateY(-10vh) rotate(360deg); }
+}
+
+.block-container {
+    padding-top: 5rem !important; /* Space for the 75px navbar */
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+    max-width: 1500px !important;
+    margin: 0 auto !important;
+    animation: mainFadeIn 0.8s ease-out;
+}
+
+@keyframes mainFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Typography ── */
+h1, h2, h3, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+}
+
+/* ── Navbar Layout ── */
+div[data-testid="stHorizontalBlock"] {
+    align-items: center !important;
+}
+
+/* ── Quick Action Cards Styling ── */
+div[data-testid="stColumn"] div[data-testid="stButton"] > button {
+    height: 100px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    white-space: pre-wrap !important;
+    line-height: 1.4 !important;
+    font-size: 1rem !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ── Hide Chrome ── */
+[data-testid="stHeader"], [data-testid="stToolbar"], footer { display: none !important; }
+
+/* ── Animations ── */
+.section-enter {
+    animation: elegantFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes elegantFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Hide hr dividers ── */
-hr { display: none !important; }
-
-/* ── Streamlit button resets inside navbar ── */
-div[data-testid="stButton"] > button[data-testid^="nb_"] {
-    all: unset !important;
-    cursor: pointer !important;
-}
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 </style>
+
+<div class="particles-container">
+    <div class="particle" style="width:2px; height:2px; left:10%; animation-duration:15s;"></div>
+    <div class="particle" style="width:3px; height:3px; left:25%; animation-duration:22s; animation-delay:2s;"></div>
+    <div class="particle" style="width:1px; height:1px; left:45%; animation-duration:18s; animation-delay:5s;"></div>
+    <div class="particle" style="width:4px; height:4px; left:70%; animation-duration:25s; animation-delay:1s;"></div>
+    <div class="particle" style="width:2px; height:2px; left:85%; animation-duration:20s; animation-delay:3s;"></div>
+</div>
 """, unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SESSION STATE INIT
-# ══════════════════════════════════════════════════════════════════════════════
 def _ss(key, default):
+    """Shorthand to set session state if not already present."""
     if key not in st.session_state:
         st.session_state[key] = default
 
-_ss("token",          None)
-_ss("active_page",    "Home")
-_ss("auth_mode",      "login")
-_ss("language",       "en")
-_ss("user_data",      {})
-_ss("user_initials",  "JD")
-_ss("user_name",      "User")
-_ss("pomodoro_time",   25 * 60)
-_ss("pomodoro_running", False)
-_ss("pomodoro_break",   False)
-_ss("focus_mode",       False)
-_ss("messages",         [])           # doubt chat history
+def init_session_state():
+    """Initializes all necessary session state variables."""
 
-# ── Force dark theme
-st.session_state.theme = "dark"
+    _ss("token",          None)
+    _ss("active_page",    "Home")
+    _ss("auth_mode",      "login")
+    _ss("language",       "en")
+    _ss("user_data",      {})
+    _ss("user_initials",  "JD")
+    _ss("user_name",      "User")
+    _ss("pomodoro_time",   25 * 60)
+    _ss("pomodoro_running", False)
+    _ss("pomodoro_break",   False)
+    _ss("focus_mode",       False)
+    _ss("messages",         [])
+    
+    # Force dark theme
+    st.session_state.theme = "dark"
+
+init_session_state()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # NAV CALLBACKS — update active_page WITHOUT page reload
@@ -121,270 +186,145 @@ def _nav(page: str):
     st.session_state.active_page = page
     # exit focus mode if leaving that section
     if page != "Focus Mode":
-        st.session_state.focus_mode   = False
+        st.session_state.focus_mode = False
         st.session_state.pomodoro_running = False
+    st.rerun()
 
 def _logout():
     for k in list(st.session_state.keys()):
         del st.session_state[k]
+    st.query_params.clear()  # Clear persistent login
     st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # NAVBAR — renders as HTML+CSS; 5 invisible st.buttons drive session_state
 # ══════════════════════════════════════════════════════════════════════════════
 def render_navbar():
-    ap      = st.session_state.active_page
-    initials = st.session_state.user_initials
+    """
+    Renders a clean horizontal navigation menu using native Streamlit columns and buttons.
+    Styles them to look like a premium navbar.
+    """
+    # ── Navbar Styling ────────────────────────────────────────────────────────
+    st.markdown("""
+    <style>
+    .nav-container {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 75px;
+        background: rgba(10, 15, 28, 0.7);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        padding: 0 5%;
+    }
+    
+    .nav-anchor + div[data-testid="stHorizontalBlock"] {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 10001 !important;
+        padding: 0 5% !important;
+        height: 75px !important;
+        display: flex !important;
+        align-items: center !important;
+        background: transparent !important;
+    }
 
-    pages = ["Home", "Study Planner", "Study Tracker", "Pomodoro", "Focus Mode"]
+    div[data-testid="stHorizontalBlock"] .stButton > button {
+        background: transparent !important;
+        border: none !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-family: 'Outfit', sans-serif !important;
+        font-size: 0.95rem !important;
+        font-weight: 500 !important;
+        padding: 0.5rem 1rem !important;
+        height: auto !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border-radius: 12px !important;
+    }
 
-    # Build nav items HTML (purely visual — real clicks come from hidden buttons)
-    items_html = ""
-    for p in pages:
-        active_cls = " nav-active" if ap == p else ""
-        items_html += (
-            f'<span class="nb-item{active_cls}" '
-            f'onclick="document.getElementById(\'nb_btn_{p.replace(" ", "_")}\').click()">'
-            f'{p}</span>'
-        )
+    div[data-testid="stHorizontalBlock"] .stButton > button:hover {
+        color: #fff !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        transform: translateY(-1px);
+    }
 
-    st.markdown(f"""
-<!-- SmartStudy AI Navbar -->
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    .nav-active-btn::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 20%;
+        width: 60%;
+        height: 4px;
+        background: var(--primary-gradient);
+        border-radius: 10px;
+        box-shadow: 0 0 15px var(--primary-glow);
+    }
+    
+    .logo-text {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 800;
+        font-size: 1.4rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-.smartnav {{
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 66px;
-    background: linear-gradient(180deg, rgba(5,7,18,.97) 0%, rgba(8,11,28,.95) 100%);
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    z-index: 999999;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2.5rem;
-    border-bottom: 1px solid rgba(99,102,241,.14);
-    box-shadow:
-        0 1px 0 rgba(255,255,255,.04) inset,
-        0 8px 40px rgba(0,0,0,.65),
-        0 1px 16px rgba(99,102,241,.09);
-}}
-.smartnav::after {{
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg,
-        transparent 0%, #4f46e5 22%, #818cf8 45%,
-        #a78bfa 55%, #818cf8 72%, #4f46e5 82%, transparent 100%);
-    background-size: 250% 100%;
-    animation: navShimmer 4s ease-in-out infinite;
-    opacity: .75;
-}}
-@keyframes navShimmer {{
-    0%   {{ background-position: -250% 0; }}
-    100% {{ background-position:  250% 0; }}
-}}
-.nb-logo {{
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.22rem;
-    font-weight: 700;
-    letter-spacing: -.3px;
-    background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 50%, #c4b5fd 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    white-space: nowrap;
-    flex-shrink: 0;
-    cursor: pointer;
-    user-select: none;
-}}
-.nb-menu {{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-    gap: .25rem;
-    flex: 1;
-    padding: 0 1.5rem;
-}}
-.nb-item {{
-    font-family: 'Poppins', sans-serif;
-    font-size: .855rem;
-    font-weight: 600;
-    color: rgba(255,255,255,.46);
-    padding: .42rem 1.1rem;
-    border-radius: 50px;
-    white-space: nowrap;
-    cursor: pointer;
-    position: relative;
-    user-select: none;
-    transition:
-        color      .3s ease,
-        background .3s ease,
-        box-shadow .3s ease,
-        transform  .3s cubic-bezier(.34,1.56,.64,1);
-}}
-.nb-item:hover {{
-    color: rgba(255,255,255,.9);
-    background: rgba(99,102,241,.13);
-    transform: translateY(-1px);
-}}
-.nb-item:active {{ transform: translateY(1px); transition-duration: .1s; }}
-.nb-item.nav-active {{
-    color: #fff;
-    background: rgba(99,102,241,.22);
-    box-shadow:
-        0 0 0 1px rgba(129,140,248,.32),
-        0 4px 18px rgba(99,102,241,.28),
-        0 0 28px rgba(99,102,241,.13);
-}}
-.nb-item.nav-active::after {{
-    content: '';
-    position: absolute;
-    bottom: -1px; left: 50%;
-    transform: translateX(-50%);
-    width: 58%; height: 2.5px;
-    border-radius: 99px;
-    background: linear-gradient(90deg, #6366f1, #a78bfa, #6366f1);
-    background-size: 200% 100%;
-    animation: activeGlow 2.2s ease-in-out infinite;
-}}
-@keyframes activeGlow {{
-    0%   {{ background-position: 0%   50%; opacity: .88; }}
-    50%  {{ background-position: 100% 50%; opacity: 1.00; }}
-    100% {{ background-position: 0%   50%; opacity: .88; }}
-}}
-.nb-right {{
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    flex-shrink: 0;
-}}
-.nb-avatar {{
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 60%, #a78bfa 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: .78rem;
-    letter-spacing: .5px;
-    cursor: pointer;
-    box-shadow: 0 0 0 2px rgba(99,102,241,0);
-    transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
-    user-select: none;
-}}
-.nb-avatar:hover {{
-    transform: scale(1.1);
-    box-shadow: 0 0 0 2.5px rgba(129,140,248,.55), 0 0 22px rgba(99,102,241,.42);
-}}
-.nb-dropdown {{
-    display: none;
-    position: fixed;
-    top: 70px; right: 2rem;
-    background: linear-gradient(160deg, rgba(9,12,32,.98) 0%, rgba(13,17,44,.96) 100%);
-    border: 1px solid rgba(129,140,248,.17);
-    border-radius: 16px;
-    min-width: 202px;
-    padding: .5rem 0;
-    box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.04) inset;
-    backdrop-filter: blur(24px);
-    z-index: 9999999;
-}}
-.nb-dropdown.open {{ display: block; animation: ddSlide .28s cubic-bezier(.16,1,.3,1) forwards; }}
-@keyframes ddSlide {{
-    from {{ opacity: 0; transform: translateY(-10px) scale(.96); }}
-    to   {{ opacity: 1; transform: translateY(0)     scale(1);   }}
-}}
-.nb-dd-item {{
-    display: block;
-    padding: .68rem 1.25rem;
-    font-family: 'Poppins', sans-serif;
-    font-size: .84rem;
-    font-weight: 500;
-    color: rgba(255,255,255,.62);
-    text-decoration: none;
-    cursor: pointer;
-    transition: background .25s ease, color .25s ease, padding-left .25s ease;
-}}
-.nb-dd-item:hover {{ background: rgba(99,102,241,.16); color: #fff; padding-left: 1.55rem; }}
-.nb-dd-sep {{ height: 1px; background: rgba(255,255,255,.06); margin: .35rem .75rem; }}
-
-/* ── Hidden Streamlit nav buttons ── */
-div.nb-btn-row {{
-    position: fixed;
-    top: -9999px;
-    left: -9999px;
-    visibility: hidden;
-    pointer-events: none;
-    height: 0; width: 0; overflow: hidden;
-}}
-
-@media (max-width: 900px) {{
-    .smartnav {{ padding: 0 1.2rem; }}
-    .nb-item  {{ padding: .38rem .75rem; font-size: .8rem; }}
-    .nb-logo  {{ font-size: 1.05rem; }}
-    .nb-menu  {{ gap: .1rem; }}
-}}
-@media (max-width: 640px) {{
-    .nb-logo  {{ display: none; }}
-    .nb-item  {{ padding: .35rem .52rem; font-size: .71rem; }}
-    .smartnav {{ height: 56px; }}
-}}
-</style>
-
-<nav class="smartnav" role="navigation" aria-label="Main navigation">
-    <span class="nb-logo"
-          onclick="document.getElementById('nb_btn_Home').click()">
-        SmartStudy<span style="font-weight:400;opacity:.7;">AI</span>
-    </span>
-    <div class="nb-menu" role="menubar">{items_html}</div>
-    <div class="nb-right">
-        <div class="nb-avatar" id="nbAvatar" onclick="nbDD()" role="button"
-             aria-haspopup="true" aria-expanded="false">{initials}</div>
-    </div>
-</nav>
-
-<div class="nb-dropdown" id="nbDropdown" role="menu">
-    <span class="nb-dd-item"
-          onclick="document.getElementById('nb_btn_Profile').click()">My Profile</span>
-    <div class="nb-dd-sep"></div>
-    <span class="nb-dd-item" onclick="document.getElementById('nb_btn_logout').click()">Sign Out</span>
-</div>
-
-<script>
-function nbDD() {{
-    var dd = document.getElementById('nbDropdown');
-    var av = document.getElementById('nbAvatar');
-    var open = dd.classList.toggle('open');
-    av.setAttribute('aria-expanded', open ? 'true' : 'false');
-}}
-document.addEventListener('click', function(e) {{
-    var dd = document.getElementById('nbDropdown');
-    var av = document.getElementById('nbAvatar');
-    if (dd && av && !av.contains(e.target) && !dd.contains(e.target))
-        dd.classList.remove('open');
-}});
-</script>
-""", unsafe_allow_html=True)
-
-    # ── Invisible Streamlit buttons that actually change session_state ──────────
-    st.markdown('<div class="nb-btn-row">', unsafe_allow_html=True)
-    c = st.columns(7)
-    with c[0]: st.button("Home",          key="nb_btn_Home",          on_click=_nav, args=("Home",))
-    with c[1]: st.button("Study Planner", key="nb_btn_Study_Planner", on_click=_nav, args=("Study Planner",))
-    with c[2]: st.button("Study Tracker", key="nb_btn_Study_Tracker", on_click=_nav, args=("Study Tracker",))
-    with c[3]: st.button("Pomodoro",      key="nb_btn_Pomodoro",      on_click=_nav, args=("Pomodoro",))
-    with c[4]: st.button("Focus Mode",    key="nb_btn_Focus_Mode",    on_click=_nav, args=("Focus Mode",))
-    with c[5]: st.button("Profile",       key="nb_btn_Profile",       on_click=_nav, args=("Profile",))
-    with c[6]: st.button("Logout",        key="nb_btn_logout",        on_click=_logout)
+    # ── Render Navbar ─────────────────────────────────────────────────────────
+    st.markdown('<div class="nav-container"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="nav-anchor"></div>', unsafe_allow_html=True)
+    
+    # Using columns to create a horizontal layout
+    cols = st.columns([1.5, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5])
+    
+    # 1. Logo
+    with cols[0]:
+        if st.button("📚 SmartStudy", key="nav_logo_btn"):
+            _nav("Home")
+    
+    # 2. Nav Items
+    pages = ["Home", "Planner", "Tracker", "Pomodoro", "Focus", "Profile"]
+    page_map = {
+        "Home": "Home", "Planner": "Study Planner", "Tracker": "Study Tracker",
+        "Pomodoro": "Pomodoro", "Focus": "Focus Mode", "Profile": "Profile"
+    }
+    
+    for i, page_label in enumerate(pages):
+        with cols[i+1]:
+            full_page_name = page_map[page_label]
+            is_active = st.session_state.active_page == full_page_name
+            btn_key = f"nav_{page_label.lower()}"
+            
+            if is_active:
+                st.markdown(f'<div class="nav-active-btn" style="position:relative;">', unsafe_allow_html=True)
+            else:
+                st.markdown('<div>', unsafe_allow_html=True)
+            
+            if st.button(page_label, key=btn_key, use_container_width=True):
+                _nav(full_page_name)
+            
+            st.markdown('</div>', unsafe_allow_html=True)
+    
+    # 3. Right side icons
+    with cols[8]:
+        st.markdown(f"""
+        <div style="width:36px; height:36px; border-radius:50%; 
+                    background:var(--primary-gradient); 
+                    box-shadow: 0 0 10px var(--primary-glow);
+                    display:flex; align-items:center; justify-content:center; 
+                    font-size:0.85rem; font-weight:800; color:#fff; cursor:pointer;
+                    margin-top: 10px;">
+            {st.session_state.user_initials}
+        </div>
+        """, unsafe_allow_html=True)
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
 
@@ -394,8 +334,8 @@ document.addEventListener('click', function(e) {{
 def _section_header(title: str, subtitle: str = ""):
     """Single styled heading + optional subtitle. Used once per page section."""
     sub_html = (
-        f'<p style="font-family:\'Poppins\',sans-serif;color:rgba(148,163,184,.8);'
-        f'font-size:.9rem;margin:.3rem 0 0;font-weight:400;">{subtitle}</p>'
+        f'<p style="font-family:\'Poppins\',sans-serif;color:rgba(148,163,184,.6);'
+        f'font-size:.85rem;margin:.3rem 0 0;font-weight:400;">{subtitle}</p>'
         if subtitle else ""
     )
     st.markdown(f"""
@@ -413,8 +353,8 @@ def _sub_label(text: str):
     """Lightweight section divider label — replaces st.subheader() everywhere."""
     st.markdown(
         f'<p style="font-family:\'Poppins\',sans-serif;font-size:.78rem;font-weight:600;'
-        f'letter-spacing:.8px;text-transform:uppercase;color:rgba(148,163,184,.6);'
-        f'margin:1.4rem 0 .6rem;">{text}</p>',
+        f'letter-spacing:.8px;text-transform:uppercase;color:rgba(148,163,184,.5);'
+        f'margin:1.875rem 0 1rem;">{text}</p>',
         unsafe_allow_html=True,
     )
 
@@ -445,111 +385,109 @@ def _get_daily_quote():
 
 # ── HOME ─────────────────────────────────────────────────────────────────────
 def render_home():
-    name = st.session_state.user_name
-    hour = datetime.now().hour
-    if   5  <= hour < 12: greeting = t("good_morning")
-    elif 12 <= hour < 17: greeting = t("good_afternoon")
-    elif 17 <= hour < 21: greeting = t("good_evening")
-    else:                  greeting = t("good_night")
+    name  = st.session_state.user_name.split()[0]
+    token = st.session_state.token
+    hour  = datetime.now().hour
+    
+    if   5  <= hour < 12: greeting = "Good morning"
+    elif 12 <= hour < 17: greeting = "Good afternoon"
+    elif 17 <= hour < 21: greeting = "Good evening"
+    else:                  greeting = "Good night"
 
-    # ── Single branded greeting (one heading, one subtitle) ────────────────
-    _section_header(f"{greeting}, {name}!", "Your AI-powered study companion is ready.")
-
-    # Stats row
-    token     = st.session_state.token
+    # 1️⃣ GREETING & HERO
     stats_res = get_user_stats(token)
-    stats     = stats_res.json() if stats_res.status_code == 200 else {}
+    streak, xp, level = 0, 0, 1
+    if stats_res.status_code == 200:
+        sdata = stats_res.json()
+        streak = sdata.get('streak', 0)
+        xp = sdata.get('total_xp', 0)
+        level = sdata.get('level', 1)
 
-    s1, s2, s3, s4 = st.columns(4)
-    s1.metric("Total XP",      stats.get("total_xp",        0))
-    s2.metric("Level",         stats.get("level",           1))
-    s3.metric("Study Streak",  f"{stats.get('streak', 0)}d")
-    s4.metric("Tasks Done",    stats.get("tasks_completed", 0))
+    streak_msg = f"🔥 {streak} day streak — keep going!" if streak > 0 else "🚀 Start your journey today!"
 
-    st.markdown("<div style='height:1.25rem'></div>", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="section-enter" style="margin-bottom:3rem; position:relative;">
+        <div style="position:absolute; top:-50px; left:-50px; width:150px; height:150px; 
+                    background:var(--primary); filter:blur(100px); opacity:0.15; z-index:-1;"></div>
+        <p style="font-family:'Outfit',sans-serif; font-size:0.9rem; font-weight:600; 
+                  letter-spacing:3px; color:rgba(255,255,255,0.4); margin-bottom:0.4rem; text-transform:uppercase;">
+            {greeting}, <span style="color:#fff; font-weight:800;">{name}</span>
+        </p>
+        <h1 style="margin:0; font-size:3.5rem; line-height:1.1; font-weight:800; 
+                   background:linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+                   -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+            {streak_msg}
+        </h1>
+        <p style="color:rgba(148,163,184,0.6); font-size:1.2rem; margin-top:0.8rem; max-width:600px;">
+            Elevate your learning experience. Your AI study companion is optimized and ready.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # ── Quick-action cards ─────────────────────────────────────────────────
-    qa_items = [
-        ("Study Planner", "📗", "Build your AI-powered schedule"),
-        ("Study Tracker", "✅", "Log sessions and track progress"),
-        ("Pomodoro",      "⏱",  "Timed deep-focus sessions"),
-        ("Focus Mode",    "🎯", "Enter distraction-free zone"),
-        ("Profile",       "👤", "Your stats and achievements"),
+    # 2️⃣ QUICK ACTIONS (Premium Grid)
+    _sub_label("Quick Actions")
+    qa_cols = st.columns(4)
+    actions = [
+        ("⏲", "Pomodoro", "qa_pomo", "Pomodoro"),
+        ("📅", "Planner", "qa_plan", "Study Planner"),
+        ("📝", "Tasks", "qa_track", "Study Tracker"),
+        ("🧠", "Focus", "qa_focus", "Focus Mode")
     ]
+    for i, (icon, label, key, page) in enumerate(actions):
+        with qa_cols[i]:
+            if st.button(f"{icon} \n {label}", use_container_width=True, key=key): 
+                _nav(page)
 
-    st.markdown("""
-<style>
-.qa-grid {
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:1rem;
-    margin-bottom:2rem;
-}
-@media(max-width:1024px){ .qa-grid{ grid-template-columns:repeat(3,1fr); } }
-@media(max-width:640px) { .qa-grid{ grid-template-columns:repeat(2,1fr); } }
-.qa-card {
-    background:rgba(13,18,48,.72);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.07);
-    border-radius:16px;
-    padding:1.5rem 1rem 1.3rem;
-    cursor:pointer;
-    text-align:center;
-    transition:
-        transform 220ms cubic-bezier(.34,1.56,.64,1),
-        box-shadow 220ms ease,
-        border-color 220ms ease;
-    animation:cardPop .5s cubic-bezier(.16,1,.3,1) both;
-}
-.qa-card:hover {
-    transform:translateY(-5px) scale(1.04);
-    box-shadow:0 8px 32px rgba(99,102,241,.3),0 0 0 1px rgba(99,102,241,.32);
-    border-color:rgba(99,102,241,.4);
-}
-@keyframes cardPop {
-    from { opacity:0; transform:translateY(22px) scale(.97); }
-    to   { opacity:1; transform:translateY(0) scale(1); }
-}
-.qa-icon  { font-size:1.85rem; margin-bottom:.5rem; }
-.qa-title {
-    font-family:'Poppins',sans-serif;
-    font-size:.88rem;
-    font-weight:600;
-    color:#f1f5f9;
-    margin:.3rem 0 .25rem;
-}
-.qa-desc {
-    font-family:'Poppins',sans-serif;
-    font-size:.75rem;
-    color:rgba(148,163,184,.75);
-    margin:0;
-    line-height:1.4;
-}
-</style>
-""", unsafe_allow_html=True)
+    st.markdown("<div style='height:2.5rem'></div>", unsafe_allow_html=True)
 
-    cards_html = '<div class="qa-grid">'
-    for label, icon, desc in qa_items:
-        btn_id = f"nb_btn_{label.replace(' ', '_')}"
-        cards_html += (
-            f'<div class="qa-card" onclick="document.getElementById(\'{btn_id}\').click()">'
-            f'<div class="qa-icon">{icon}</div>'
-            f'<div class="qa-title">{label}</div>'
-            f'<p class="qa-desc">{desc}</p></div>'
-        )
-    cards_html += '</div>'
-    st.markdown(cards_html, unsafe_allow_html=True)
+    # 3️⃣ STATS & PROGRESS
+    col_l, col_r = st.columns([1.6, 1])
+    
+    with col_l:
+        _sub_label("Level Progress")
+        progress = min((xp % 1000) / 10.0, 100.0)
+        st.markdown(f"""
+        <div class="glass-card" style="padding:2rem; margin-bottom:0;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                <div>
+                    <p style="font-size:0.85rem; color:rgba(255,255,255,0.4); margin:0; text-transform:uppercase; letter-spacing:1px;">Rank</p>
+                    <p style="font-size:1.5rem; font-weight:800; color:var(--accent); margin:0;">Level {level}</p>
+                </div>
+                <div style="text-align:right;">
+                    <p style="font-size:0.85rem; color:rgba(255,255,255,0.4); margin:0; text-transform:uppercase; letter-spacing:1px;">Experience</p>
+                    <p style="font-size:1.5rem; font-weight:800; color:#fff; margin:0;">{xp % 1000} <span style="font-size:0.9rem; opacity:0.5;">/ 1000</span></p>
+                </div>
+            </div>
+            <div style="width:100%; height:12px; background:rgba(255,255,255,0.05); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
+                <div style="width:{progress}%; height:100%; background:var(--primary-gradient); 
+                            box-shadow:0 0 20px var(--primary-glow); border-radius:20px; transition: width 1s ease-in-out;"></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-    # ── Daily quote ────────────────────────────────────────────────────────
+    with col_r:
+        _sub_label("Current Streak")
+        st.markdown(f"""
+        <div class="glass-card" style="padding:2rem; text-align:center; height:155px; display:flex; flex-direction:column; justify-content:center;">
+            <p style="font-size:3rem; margin:0;">🔥</p>
+            <p style="font-size:2.2rem; font-weight:900; margin:0; line-height:1;">{streak} <span style="font-size:1.1rem; font-weight:500; opacity:0.6;">Days</span></p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("<div style='height:2.5rem'></div>", unsafe_allow_html=True)
+
+    # 4️⃣ MOTIVATIONAL QUOTE
     quote, author = _get_daily_quote()
     st.markdown(f"""
-<div class="glass-card section-enter">
-    <p class="motivational-quote">“{quote}”
-        <span style="display:block;text-align:right;margin-top:.75rem;
-                     font-weight:500;font-style:normal;font-size:.85rem;
-                     color:rgba(148,163,184,.75);">— {author}</span>
-    </p>
-</div>""", unsafe_allow_html=True)
+    <div class="glass-card section-enter" style="border-left: 4px solid var(--primary); background:rgba(99,102,241,0.03);">
+        <p class="motivational-quote" style="text-align:left; padding:0; margin:0; border:none; font-size:1.1rem;">“{quote}”
+            <span style="display:block; margin-top:0.75rem; font-weight:500; font-size:0.85rem; color:rgba(148,163,184,0.6);">
+                — {author}
+            </span>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 
 
@@ -768,9 +706,12 @@ def render_pomodoro():
 
 # ── FOCUS MODE ────────────────────────────────────────────────────────────────
 def render_focus_mode():
-    _ss("pomodoro_time",    25 * 60)
-    _ss("pomodoro_running", True)
-    _ss("pomodoro_break",   False)
+    # Ensure focus mode state is set correctly
+    if "pomodoro_time" not in st.session_state:
+        st.session_state.pomodoro_time = 25 * 60
+    
+    st.session_state.pomodoro_running = True
+    st.session_state.pomodoro_break = False
 
     minutes  = st.session_state.pomodoro_time // 60
     seconds  = st.session_state.pomodoro_time % 60
@@ -835,10 +776,7 @@ def render_focus_mode():
 <div class="focus-overlay">
     <div class="focus-label">{mode_text}</div>
     <div class="focus-time">{time_str}</div>
-    <button class="focus-exit"
-            onclick="document.getElementById('nb_btn_Home').click()">
-        Exit Focus Mode
-    </button>
+    <p style="color:rgba(255,255,255,0.3); font-size:0.8rem; margin-top:2rem;">Use the top menu to exit</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -925,7 +863,7 @@ def render_auth():
         if re.search(r"[!@#$%^&*]",pw): s += 1
         return s
 
-    ILLUS = os.path.join(os.path.dirname(__file__), "assets", "study_illustration.png")
+    ILLUS = os.path.join(os.path.dirname(__file__), "assets", "premium_study_illustration.png")
     b64   = _b64(ILLUS)
     illus_html = (
         f'<img src="data:image/png;base64,{b64}" class="illus-img" alt="SmartStudy AI"/>'
@@ -934,15 +872,76 @@ def render_auth():
 
     st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-html,body,.stApp,[data-testid="stApp"],[data-testid="stAppViewContainer"],
-[data-testid="stAppViewContainer"]>section,[data-testid="stAppViewContainer"]>section>div,
-.main,main {
-    background:radial-gradient(ellipse at top,#0f172a 0%,#020617 50%,#000 100%) !important;
-    background-attachment:fixed !important;
-    min-height:100vh; margin:0; padding:0;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --bg-deep: #05070a;
+    --bg-accent: #0f172a;
+    --glass-bg: rgba(15, 23, 42, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --accent-primary: #6366f1;
+    --accent-secondary: #a78bfa;
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
 }
-html { background:#000 !important; }
+
+html, body, [data-testid="stAppViewContainer"] {
+    background: radial-gradient(circle at top right, #1e1b4b 0%, #05070a 45%, #000 100%) !important;
+    background-attachment: fixed !important;
+    color: var(--text-main) !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+.main .block-container {
+    max-width: 1200px !important;
+    padding: 1rem 2rem 2rem !important;
+}
+
+/* Elegant Typography */
+h1, h2, h3, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+    background: linear-gradient(135deg, #fff 30%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Premium Glassmorphism */
+.glass-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 24px !important;
+    padding: 2rem !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.glass-card:hover {
+    border-color: rgba(99, 102, 241, 0.3) !important;
+    transform: translateY(-4px) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-enter {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hide scrollbars but keep functionality */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+[data-testid="stSidebar"] { display: none !important; }
 [data-testid="stHorizontalBlock"] {
     height:100vh !important; padding:0 !important; gap:0 !important; align-items:center;
 }
@@ -1058,7 +1057,9 @@ html { background:#000 !important; }
                             res = login_user(email_in, pass_in)
                             if res.status_code == 200:
                                 data = res.json()
-                                st.session_state.token = data.get("access_token")
+                                token = data.get("access_token")
+                                st.session_state.token = token
+                                st.query_params["token"] = token  # Persist for refresh
                                 st.rerun()
                             else:
                                 st.error(res.json().get("detail", "Invalid credentials."))
@@ -1116,10 +1117,12 @@ html { background:#000 !important; }
 # MAIN — entry point
 # ══════════════════════════════════════════════════════════════════════════════
 def main():
-    # ── OAuth token from URL ─────────────────────────────────────────────────
+    # ── Ensure Session State is Initialized ──────────────────────────────────
+    init_session_state()
+    # ── Restore Token from URL (Persistent Login) ──────────────────────────
     if "token" in st.query_params:
         st.session_state.token = st.query_params["token"]
-        st.query_params.clear()
+        # We DON'T clear it now to keep it persistent on refresh
         try:
             res = get_me(st.session_state.token)
             if res.status_code == 200:
@@ -1134,7 +1137,6 @@ def main():
                     st.session_state.user_initials = "".join(p[0].upper() for p in email.split("@")[0].split(".") if p)[:2]
         except Exception:
             pass
-        st.rerun()
 
     # ── Logout via query param ───────────────────────────────────────────────
     if "logout" in st.query_params:
